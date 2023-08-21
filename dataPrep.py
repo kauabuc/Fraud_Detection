@@ -29,9 +29,14 @@ class FraudDetection(object):
             "nameDest": df_features['nameDest'].value_counts().index,
             'quanTransf': df_features['nameDest'].value_counts()
         })
+        transf = transf.drop(["nameDest"], axis=1)
+        transf.reset_index(inplace=True)
+        transf = transf.rename(columns = {'index':'nameDest'})
+        
 
         df_final_features = pd.merge(df_features, transf, on=[
                                      'nameDest'], how='left')
+        df_final_features = df_final_features.rename(columns={"quanTransf_y": "quanTransf"})
 
         df_final_features = df_final_features.drop(
             ['step', 'nameOrig', 'nameDest', 'newbalanceDest', 'hours'], axis=1)
